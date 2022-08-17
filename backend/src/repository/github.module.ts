@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { GithubController } from './github.controller';
+import { GithubService } from './github.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Repository } from './entities/repository.entity';
+import { User } from './entities/user.entity';
+import { Contribution } from './entities/contribution.entity';
 
 @Module({
   imports: [
@@ -16,9 +19,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.POSTGRES_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
+      entities: ['dist/**/*.entity.ts'],
     }),
+    TypeOrmModule.forFeature([User, Repository, Contribution]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [GithubController],
+  providers: [GithubService],
 })
-export class AppModule {}
+export class GithubModule {}
