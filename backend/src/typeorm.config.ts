@@ -1,3 +1,9 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
+
 export const config = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
@@ -7,4 +13,8 @@ export const config = {
   database: process.env.POSTGRES_DATABASE,
   autoLoadEntities: true,
   synchronize: true,
+};
+
+export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
+  // useFactory: async (): Promise<TypeOrmModuleOptions> => {},
 };

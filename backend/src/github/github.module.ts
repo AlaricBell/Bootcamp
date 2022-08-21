@@ -3,12 +3,14 @@ import { GithubController } from './github.controller';
 import { GithubService } from './github.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Repository } from './entities/repository.entity';
-import { User } from './entities/user.entity';
-import { Contribution } from './entities/contribution.entity';
+import { Repository as RepositoryEntity } from './entities/repository.entity';
+import { User as UserEntity } from './entities/user.entity';
+import { Contribution as ContributionEntity } from './entities/contribution.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -20,8 +22,14 @@ import { Contribution } from './entities/contribution.entity';
       autoLoadEntities: true,
       synchronize: true,
       entities: ['dist/**/*.entity.ts'],
+      migrations: [__dirname + '**/migration/*.{ts,js}'],
+      subscribers: [__dirname + '/**/subscriber/*.{ts,js}'],
     }),
-    TypeOrmModule.forFeature([User, Repository, Contribution]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      RepositoryEntity,
+      ContributionEntity,
+    ]),
   ],
   controllers: [GithubController],
   providers: [GithubService],

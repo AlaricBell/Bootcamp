@@ -5,13 +5,14 @@ import { Contribution } from './contribution.entity';
 @Entity('repository')
 export class Repository {
   @PrimaryColumn()
-  @ManyToMany(() => Contribution, (contribution) => contribution.repository, {
+  @ManyToMany(() => User, (user) => user.id, {
     onDelete: 'SET NULL',
   })
   id: number;
 
+  @Column({ type: 'int4' })
   @ManyToOne(() => User, (user) => user.id, { onDelete: 'SET NULL' })
-  owner: User;
+  owner: number;
 
   @Column({ type: 'varchar', length: 255 })
   full_name: string;
@@ -27,4 +28,9 @@ export class Repository {
 
   @Column({ type: 'int4' })
   stargazers_count: number;
+
+  @ManyToMany(() => User, (user) => user.repositories, {
+    onDelete: 'SET NULL',
+  })
+  users: User[];
 }
